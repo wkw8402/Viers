@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <link href="main.css" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Viers</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Dropdown
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">Disabled</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-3">
+    <!-- <div class="restaurant">
+      <div class="thumbnail" style="background-image: url('https://via.placeholder.com/350')"></div>
+      <div class="flex-grow-1 p-4">
+        <h5 class="name">Super Duper</h5>
+        <p class="date">2030년 1월 8일</p>
+        <p class="crowd">20000원</p>
+        <p class="float-end">?0</p>
+      </div>
+    </div> -->
+  </div>
+
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnrmtI0N1iyXXqQFcjesJhLYqQOx7oRPI",
+      authDomain: "viers-af802.firebaseapp.com",
+      projectId: "viers-af802",
+      storageBucket: "viers-af802.appspot.com",
+      messagingSenderId: "963884415772",
+      appId: "1:963884415772:web:aaf34df7c33784cdb118d9",
+      measurementId: "G-3G93GKTBQD"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+
+    const db = firebase.firestore();
+    db.collection('restaurant').get().then((result)=>{
+      result.forEach((doc)=>{
+        console.log(doc.data().image);
+        var template = `<div class="restaurant">
+        <div class="thumbnail" style="background-image: url(${doc.data().image})"></div>
+        <div class="flex-grow-1 p-4">
+          <h5 class="name">${doc.data().name}</h5>
+          <p class="date">2030년 1월 8일</p>
+          <p class="crowd">${doc.data().crowd}</p>
+          <p class="float-end">?0</p>
+        </div>
+      </div>`;
+        $('.container').append(template)
+      })
+    })
+
+  </script>
+  
+</body>
+</html>
