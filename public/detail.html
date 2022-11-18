@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload</title>
+  <title>LogIn</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link href="main.css" rel="stylesheet">
 </head>
@@ -47,14 +47,18 @@
     </div>
   </nav>
 
-  <div class="container mt-3">
-    <input type="text" class="form-control mt-2" id="name" placeholder="name">
-    <textarea class="form-control mt-2" id="content">content</textarea>
-    <input type="text" class="form-control mt-2" id="crowd" placeholder="crowd">
-    <input class="form-control mt-2" type="file" id="image">
-    <button class="btn btn-danger mt-3" id="send">Submit</button>
+  <div class="container">
+    <div class="detail-pic my-4" style="background-image: url('https://placeimg.com/640/380/tech');"></div>
+    <div>
+      <h5 class="title">Place Name</h5>
+      <hr>
+      <h5 class="user">User updated : Unknown</h5>
+      <p class="date">Time Updated</p>
+      <p class="crowd">Crowd</p>
+      <button id="update" class="btn btn-outline-secondary">Update</button>
+      <button id="chat" class="btn btn-outline-secondary">Chat</button>
+    </div>
   </div>
-
 
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
@@ -84,45 +88,39 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    $('#send').click(function(){
+    var myUid = JSON.parse(localStorage.getItem('user')).uid
 
-        var file = document.querySelector('#image').files[0];
-        var storageRef = storage.ref();
-        var pathToSave = storageRef.child('image/' + file.name);
-        var uploadWork = pathToSave.put(file);
+    $('#chat').click(function(){
 
-        uploadWork.on( 'state_changed', 
-            // function there is a change
-            null, 
-            //function when there is an error
-            function(error) {
-                console.error('Reason for failure', error);
-            }, 
-            //function when there is a success
-            () => {
-                uploadWork.snapshot.ref.getDownloadURL().then((url) => {
-                    console.log('Uploaded Path', url);
+        var data = { 
+            participants : [myUid, uploaderUid],
+            place : placeName,
+            date : new Date()
+        }
 
-                    var toSave = {
-                        name : $('#name').val(), 
-                        crowd : parseInt($('#crowd').val()),
-                        content : $('#content').val(), 
-                        date : new Date(),
-                        image : url,
-                        uid : JSON.parse(localStorage.getItem('user')).uid,
-                        userName : JSON.parse(localStorage.getItem('user')).displayName
-                    }
-                    db.collection('places').add(toSave).then((result)=>{
-                        console.log(result);
-                        window.location.href = "/index.html";
-                    }).catch((err)=>{
-                        console.log(err)
-                    })
-                });
-            }
-        );
+        db.collection('chatrooms').add(data)
     })
 
+    var uploaderUid;
+    var placeName;
+
+    var queryString = new URLSearchParams(window.location.search);
+
+    db.collection('places').doc(queryString.get('id')).get().then((result)=>{
+
+        uploaderUid = result.data().uid;
+        placeName = result.data().name;
+
+        $('.title').html(result.data().name)
+        $('.user').html('User updated : ' + result.data().userName)
+        $('.crowd').html(result.data().crowd)
+        $('.detail-pic').css('background-image', `url(${result.data().image})`)
+
+    })
+
+    $('#update').click(function(){
+        window.location.href = '/update.html?id=' + queryString.get('id')
+    })
 
   </script>
   

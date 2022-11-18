@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Home</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link href="main.css" rel="stylesheet">
 </head>
@@ -48,7 +48,7 @@
   </nav>
 
   <div class="container mt-3">
-    <!-- <div class="restaurant">
+    <!-- <div class="places">
       <div class="thumbnail" style="background-image: url('https://via.placeholder.com/350')"></div>
       <div class="flex-grow-1 p-4">
         <h5 class="name">Super Duper</h5>
@@ -87,13 +87,13 @@
   <script>
 
     const db = firebase.firestore();
-    db.collection('restaurant').get().then((result)=>{
+    db.collection('places').get().then((result)=>{
       result.forEach((doc)=>{
         console.log(doc.data().image);
-        var template = `<div class="restaurant">
+        var template = `<div class="places">
         <div class="thumbnail" style="background-image: url(${doc.data().image})"></div>
         <div class="flex-grow-1 p-4">
-          <h5 class="name">${doc.data().name}</h5>
+          <h5 class="name"><a href="/detail.html?id=${doc.id}">${doc.data().name}</a></h5>
           <p class="date">2030년 1월 8일</p>
           <p class="crowd">${doc.data().crowd}</p>
           <p class="float-end">?0</p>

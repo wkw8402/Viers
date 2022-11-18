@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload</title>
+  <title>LogIn</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link href="main.css" rel="stylesheet">
 </head>
@@ -47,13 +47,31 @@
     </div>
   </nav>
 
-  <div class="container mt-3">
-    <input type="text" class="form-control mt-2" id="name" placeholder="name">
-    <textarea class="form-control mt-2" id="content">content</textarea>
-    <input type="text" class="form-control mt-2" id="crowd" placeholder="crowd">
-    <input class="form-control mt-2" type="file" id="image">
-    <button class="btn btn-danger mt-3" id="send">Submit</button>
-  </div>
+  <div class="container p-4 detail">
+    <div class="row">
+      <div class="col-3 p-0">
+        <ul class="list-group chat-list">
+          <!-- <li class="list-group-item">
+            <h6>Chatroom1</h6>
+            <h6 class="text-small">Chatroom Id</h6>
+          </li> -->
+        </ul>
+      </div>
+      <div class="col-9 p-0">
+        <div class="chat-room">
+          <ul class="list-group chat-content">
+            <li><span class="chat-box">Chatroom1 content</span></li>
+            <li><span class="chat-box">Chatroom1 content</span></li>
+            <li><span class="chat-box mine">Chatroom1 content</span></li>
+          </ul>
+          <div class="input-group">
+            <input class="form-control" id="chat-input">
+            <button class="btn btn-secondary" id="send">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
 
 
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
@@ -83,46 +101,20 @@
   <script>
     const db = firebase.firestore();
     const storage = firebase.storage();
+    var myUid = JSON.parse( localStorage.getItem('user') ).uid;
 
-    $('#send').click(function(){
-
-        var file = document.querySelector('#image').files[0];
-        var storageRef = storage.ref();
-        var pathToSave = storageRef.child('image/' + file.name);
-        var uploadWork = pathToSave.put(file);
-
-        uploadWork.on( 'state_changed', 
-            // function there is a change
-            null, 
-            //function when there is an error
-            function(error) {
-                console.error('Reason for failure', error);
-            }, 
-            //function when there is a success
-            () => {
-                uploadWork.snapshot.ref.getDownloadURL().then((url) => {
-                    console.log('Uploaded Path', url);
-
-                    var toSave = {
-                        name : $('#name').val(), 
-                        crowd : parseInt($('#crowd').val()),
-                        content : $('#content').val(), 
-                        date : new Date(),
-                        image : url,
-                        uid : JSON.parse(localStorage.getItem('user')).uid,
-                        userName : JSON.parse(localStorage.getItem('user')).displayName
-                    }
-                    db.collection('places').add(toSave).then((result)=>{
-                        console.log(result);
-                        window.location.href = "/index.html";
-                    }).catch((err)=>{
-                        console.log(err)
-                    })
-                });
-            }
-        );
+    db.collection('chatrooms').where('participants', 'array-contains', myUid).get().then((result)=>{
+        result.forEach((a)=>{
+            console.log(a.data())
+            var template = `<li class="list-group-item">
+                <h6>${ a.data().place }</h6>
+                <h6 class="text-small">${ a.id }</h6>
+            </li>`
+            $('.chat-list').append(template)
+        })
     })
 
+    
 
   </script>
   
