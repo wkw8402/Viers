@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LogIn</title>
+  <title>Chat</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link href="main.css" rel="stylesheet">
 </head>
@@ -103,6 +103,19 @@
     const storage = firebase.storage();
     var myUid = JSON.parse( localStorage.getItem('user') ).uid;
 
+    $('#send').click(function(){
+        
+        var message = {
+            content : $('#chat-input').val(),
+            date : new Date(),
+            uid : myUid,
+        }
+
+        db.collection('chatrooms').doc(chatroomId).collection('messages').add(message)
+    })
+
+    var chatroomId;
+
     db.collection('chatrooms').where('participants', 'array-contains', myUid).get().then((result)=>{
         result.forEach((a)=>{
             console.log(a.data())
@@ -111,6 +124,10 @@
                 <h6 class="text-small">${ a.id }</h6>
             </li>`
             $('.chat-list').append(template)
+
+            $('.list-group-item').click(function(){
+                chatroomId = $(this).children('.text-small').text()
+            })
         })
     })
 
