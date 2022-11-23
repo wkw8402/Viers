@@ -130,9 +130,18 @@
                     result.forEach((a)=>{
                         //console.log(a.data())
 
-                        var template = `<li><span class="chat-box">${a.data().content}</span></li>`;
+                        function leftRight() {
+                            if (myUid == a.data().uid) {
+                                return `<li><span class="chat-box mine">${a.data().content}</span></li>`;
+                            } else {
+                                return `<li><span class="chat-box">${a.data().content}</span></li>`;
+                            }
+                        }
+                        
+                        var template = leftRight();
                         $('.chat-content').append(template)
                     })
+
                 })
             })
         })

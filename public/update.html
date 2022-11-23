@@ -92,11 +92,13 @@
             name : $('#name').val(), 
             content : $('#content').val(), 
             crowd : $('#crowd').val(),
+            userName :$('#userName').html(),
+            date : new Date(),
+            uid : JSON.parse(localStorage.getItem('user')).uid
         }
 
-        db.collection('places').doc(queryString.get('id')).update(toUpdate).then(()=>{
-            window.location.href = "/index.html";
-        })
+        db.collection('places').doc(queryString.get('id')).update(toUpdate)
+        window.location.href = "/detail.html";
     })
 
 

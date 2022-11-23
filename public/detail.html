@@ -93,6 +93,7 @@
         }
 
         db.collection('chatrooms').add(data)
+        window.location.href = "/chat.html";
     })
 
     var uploaderUid;
@@ -107,7 +108,7 @@
 
         $('.title').html(result.data().name)
         $('.user').html('User updated : ' + result.data().userName)
-        $('.date').html('Time updated : ' + new Date(result.data().date * 1000).toUTCString())
+        $('.date').html('Time updated : ' + new Date(result.data().date.seconds * 1000).toUTCString())
         $('.crowd').html('Crowd Level : ' + result.data().crowd)
         $('.detail-pic').css('background-image', `url(${result.data().image})`)
 
