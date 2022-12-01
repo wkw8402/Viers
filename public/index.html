@@ -95,6 +95,9 @@
         <div class="flex-grow-1 p-4">
           <h5 class="name"><a href="/detail.html?id=${doc.id}">${doc.data().name}</a></h5>
           <p class="date">${new Date(doc.data().date.seconds * 1000).toUTCString()}</p>
+          <div class="progress">
+            <div class="progress-bar bg-info" role="progressbar" style="width: ${doc.data().crowd / 10 * 100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
           <p class="crowd">Crowd Level : ${doc.data().crowd}</p>
           <p class="float-end">
             <button type="button" class="btn btn-danger btn-floating"><i class="fas fa-heart pr-2" aria-hidden="true"></i></button>
@@ -111,6 +114,8 @@
   <script type="text/javascript" src="node_modules/mdbootstrap/js/popper.min.js"></script>
   <script type="text/javascript" src="node_modules/mdbootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="node_modules/mdbootstrap/js/mdb.min.js"></script>
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
   
 </body>
 </html>
