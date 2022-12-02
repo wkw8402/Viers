@@ -51,10 +51,12 @@
             <li><span class="chat-box">Chatroom1 content</span></li>
             <li><span class="chat-box mine">Chatroom1 content</span></li>
           </ul>
-          <div class="input-group">
-            <input class="form-control" id="chat-input">
-            <button class="btn btn-secondary" id="send">Send</button>
-          </div>
+          <section id="writeAndSend">
+            <div class="input-group">
+                <input class="form-control" id="chat-input">
+                <button class="btn btn-secondary" id="send">Send</button>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -108,6 +110,14 @@
         }
 
         db.collection('chatrooms').doc(chatroomId).collection('messages').add(message)
+
+        const rootElement = document.getElementById("writeAndSend");
+        
+        const element = React.createElement("div", { className:"input-group" },
+                        React.createElement("input", {className:"form-control", id:"chat-input"}),
+                        React.createElement("button", {className:"btn btn-secondary", id:"send"}, "Send"));
+
+        ReactDOM.render(element, rootElement);
     })
 
     var chatroomId;
@@ -152,6 +162,8 @@
     
 
   </script>
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
   
 </body>
 </html>
